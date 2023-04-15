@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class srmsAppConfig(AppConfig):
+class srsAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'srmsApp'
+    name = 'srsApp'

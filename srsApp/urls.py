@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.views.generic.base import RedirectView
 
-from srmsApp import views
+from srsApp import views
 
 context = {
     'page': 'login',

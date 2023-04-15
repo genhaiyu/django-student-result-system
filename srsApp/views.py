@@ -7,8 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from srmsApp import forms, models
-from srmsApp.forms import UserRegistration
+from srsApp import forms, models
 
 context = {
     'page': '',
