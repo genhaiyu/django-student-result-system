@@ -9,13 +9,29 @@
                     <div class="card-body">
                         <div class="container-fluid">
                             <div class="row">
+                                <div class="col-md-4">
+                                    {% if user.profile.avatar|length > 1 %}
+                                        <img src="{{ user.profile.avatar.url }}" alt="user-image"
+                                             class="img-thumbnail img-fluid">
+                                    {% else %}
+                                        No avatar
+                                    {% endif %}
+
+                                    <div style="text-align: center;"><a href="">Update Avatar</a></div>
+                                </div>
                                 <div class="col-md-8">
                                     <dl>
-                                        <dt class="text-muted">Fullname</dt>
+                                        <dt class="text-muted">Full Name</dt>
                                         <dd class="ps-4">{{ user.first_name }} {{ user.last_name }}</dd>
+                                        <dt class="text-muted">Birthday</dt>
+                                        <dd class="ps-4">{{ user.profile.dob|date:"F d, Y" }}</dd>
+                                        <dt class="text-muted">Contact</dt>
+                                        <dd class="ps-4">{{ user.profile.contact }}</dd>
+                                        <dt class="text-muted">Address</dt>
+                                        <dd class="ps-4">{{ user.profile.address }}</dd>
                                         <dt class="text-muted">Email</dt>
                                         <dd class="ps-4">{{ user.email }}</dd>
-                                        <dt class="text-muted">Username</dt>
+                                        <dt class="text-muted">User Name</dt>
                                         <dd class="ps-4">{{ user.username }}</dd>
                                     </dl>
                                 </div>

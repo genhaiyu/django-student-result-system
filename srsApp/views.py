@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from srsApp import forms, models
+from srsApp.models import Profile
 
 context = {
     'page': '',
@@ -72,10 +73,11 @@ def logout_user(student):
 def update_profile(request):
     context['page_title'] = 'Update Profile'
     user = User.objects.get(id=request.user.id)
+    user_profile = Profile.objects.get(user=user)
+    context['user_profile'] = user_profile
     if not request.method == 'POST':
         form = forms.UpdateProfile(instance=user)
         context['form'] = form
-        print(form)
     else:
         form = forms.UpdateProfile(request.POST, instance=user)
         if form.is_valid():
@@ -126,10 +128,10 @@ def class_mgt(request):
 @login_required
 def manage_class(request, pk=None):
     if pk is not None:
-        classData = models.Class.objects.get(id=pk)
-        context['classData'] = classData
+        class_data = models.Class.objects.get(id=pk)
+        context['class_data'] = class_data
     else:
-        context['classData'] = {}
+        context['class_data'] = {}
     return render(request, 'manage_class.html', context)
 
 
@@ -339,7 +341,7 @@ def manage_result(request, pk=None):
     context['subjects'] = subjects
     if pk is not None:
         result = models.Result.objects.get(id=pk)
-        marks = models.Student_Subject_Result.objects.filter(result=result)
+        marks = models.StudentSubjectResult.objects.filter(result=result)
         context['marks'] = marks
         context['result'] = result
     else:
@@ -352,7 +354,7 @@ def view_result(request, pk=None):
     if pk is not None:
         result = models.Result.objects.get(id=pk)
         context['result'] = result
-        marks = models.Student_Subject_Result.objects.filter(result=result)
+        marks = models.StudentSubjectResult.objects.filter(result=result)
         context['marks'] = marks
     else:
         context['result'] = {}
@@ -381,7 +383,7 @@ def save_result(request):
                 is_new = True
             else:
                 rid = post['id']
-            models.Student_Subject_Result.objects.filter(result=result).delete()
+            models.StudentSubjectResult.objects.filter(result=result).delete()
             has_error = False
             subjects = request.POST.getlist('subject[]')
             grade = request.POST.getlist('grade[]')

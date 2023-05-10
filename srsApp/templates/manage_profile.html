@@ -16,29 +16,42 @@
                                         <div class="form-group mb-3">
                                             <label for="first_name" class="control-label">First Name</label>
                                             <input type="text" class="form-control rounded-0" name="first_name"
-                                                   id="first_name" value="
-                                                    {% if form.data.first_name %}{{ form.data.first_name }}{% else %}{{ user.first_name }}{% endif %}"
+                                                   id="first_name" value="{{ user.first_name }}"
                                                    required="required">
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="last_name" class="control-label">Last Name</label>
                                             <input type="text" class="form-control rounded-0" name="last_name"
-                                                   id="last_name" value="
-                                                    {% if form.data.last_name %}{{ form.data.last_name }}{% else %}{{ user.last_name }}{% endif %}"
+                                                   id="last_name" value="{{ user.last_name }}"
                                                    required="required">
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="username" class="control-label">Username</label>
                                             <input type="text" class="form-control rounded-0" name="username"
-                                                   id="username" value="
-                                                    {% if form.data.username %}{{ form.data.username }}{% else %}{{ user.username }}{% endif %}"
+                                                   id="username" value="{{ user.username }}"
                                                    required="required">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="dob" class="control-label">Birthdate</label>
+                                            <input type="date" class="form-control rounded-0" name="dob" id="dob"
+                                                   value="{{ user_profile.dob|date:'Y-m-d' }}" required="required">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="contact" class="control-label">Contact</label>
+                                            <input type="text" class="form-control rounded-0" name="contact"
+                                                   id="contact" value="{{ user_profile.contact }}"
+                                                   required="required">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="address" class="control-label">Address</label>
+                                            <textarea rows="3" class="form-control rounded-0" name="address"
+                                                      id="address"
+                                                      required="required">{{ user_profile.address }}</textarea>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="email" class="control-label">Email</label>
                                             <input type="email" class="form-control rounded-0" name="email" id="email"
-                                                   value="
-                                                           {% if form.data.email %}{{ form.data.email }}{% else %}{{ user.email }}{% endif %}"
+                                                   value="{{ user.email }}"
                                                    required="required">
                                         </div>
                                         <div class="form-group mb-3">
@@ -54,7 +67,7 @@
                                         <div class="form-group mb-3">
                                             <div class="d-flex w-100 justify-content-end">
                                                 <button class="btn btn-sm rounded-0 btn-primary col-4">
-                                                    Login
+                                                    Update
                                                 </button>
                                             </div>
                                         </div>

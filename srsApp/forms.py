@@ -1,9 +1,9 @@
 from django import forms
-from django import forms
 from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
 
 from srsApp import models
+from srsApp.models import Profile
 
 
 class UpdateProfile(UserChangeForm):
@@ -25,7 +25,7 @@ class UpdateProfile(UserChangeForm):
         email = self.cleaned_data['email']
         try:
             user = User.objects.exclude(id=self.cleaned_data['id']).get(email=email)
-        except Exception as e:
+        except RuntimeError as e:
             return email
         raise forms.ValidationError(f"The {user.email} mail is already exists/taken")
 
@@ -33,9 +33,19 @@ class UpdateProfile(UserChangeForm):
         username = self.cleaned_data['username']
         try:
             user = User.objects.exclude(id=self.cleaned_data['id']).get(username=username)
-        except Exception as e:
+        except RuntimeError as e:
             return username
         raise forms.ValidationError(f"The {user.username} mail is already exists/taken")
+
+
+class UpdateProfileMeta(forms.ModelForm):
+    dob = forms.DateField(help_text="The Birthday field is required.")
+    contact = forms.CharField(max_length=250, help_text="The Contact field is required.")
+    address = forms.CharField(help_text="The Contact field is required.")
+
+    class Meta:
+        model = Profile
+        fields = ('dob', 'contact', 'address')
 
 
 class UserRegistration(UserCreationForm):
@@ -81,7 +91,7 @@ class UpdatePasswords(PasswordChangeForm):
 class SaveClass(forms.ModelForm):
     level = forms.CharField(max_length="250")
     section = forms.CharField(max_length="250")
-    status = forms.ChoiceField(choices=[('1', 'Active'), ('2', 'Inctive')])
+    status = forms.ChoiceField(choices=[('1', 'Active'), ('2', 'Inactive')])
 
     class Meta:
         model = models.Class
@@ -94,10 +104,10 @@ class SaveClass(forms.ModelForm):
 
         try:
             if id is None:
-                levelCount = models.Class.objects.filter(level=level, section=section).count()
+                level_count = models.Class.objects.filter(level=level, section=section).count()
             else:
-                levelCount = models.Class.objects.exclude(id=id).filter(level=level, section=section).count()
-            if levelCount == 0:
+                level_count = models.Class.objects.exclude(id=id).filter(level=level, section=section).count()
+            if level_count == 0:
                 return level
         except:
             return level
@@ -118,11 +128,11 @@ class SaveSubject(forms.ModelForm):
         id = self.data['id'] if not self.data['id'] == '' else None
         try:
             if id is not None:
-                subjectCount = models.Subject.objects.exclude(id=id).filter(name=name).count()
+                subject_count = models.Subject.objects.exclude(id=id).filter(name=name).count()
             else:
-                subjectCount = models.Subject.objects.filter(name=name).count()
-                print(subjectCount)
-            if subjectCount == 0:
+                subject_count = models.Subject.objects.filter(name=name).count()
+                print(subject_count)
+            if subject_count == 0:
                 return name
         except Exception as err:
             print(err)
@@ -194,7 +204,7 @@ class SaveSubjectResult(forms.ModelForm):
     grade = forms.CharField(max_length="100", label="Grade")
 
     class Meta:
-        model = models.Student_Subject_Result
+        model = models.StudentSubjectResult
         fields = ('result', 'subject', 'grade',)
 
     def clean_result(self):

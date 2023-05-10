@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
@@ -54,29 +55,40 @@ class Result(models.Model):
     def __str__(self):
         return f"{self.student} - {self.semester}"
 
-    def countSubjects(self):
+    def count_subjects(self):
         try:
-            resultCount = Student_Subject_Result.objects.filter(result=self).count()
+            result_count = StudentSubjectResult.objects.filter(result=self).count()
         except:
-            resultCount = 0
-        return resultCount
+            result_count = 0
+        return result_count
 
     def average(self):
+        average = 0
         try:
-            resultCount = Student_Subject_Result.objects.filter(result=self).count()
-            results = Student_Subject_Result.objects.filter(result=self).aggregate(Sum('grade'))['grade__sum']
-            if not results is None:
-                average = results / resultCount
+            result_count = StudentSubjectResult.objects.filter(result=self).count()
+            results = StudentSubjectResult.objects.filter(result=self).aggregate(Sum('grade'))['grade__sum']
+            if results is not None:
+                average = results / result_count
         except Exception as err:
             print(err)
-            average = 0
         return average
 
 
-class Student_Subject_Result(models.Model):
+class StudentSubjectResult(models.Model):
     result = models.ForeignKey(Result, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     grade = models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.result} - {self.subject}"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    contact = models.CharField(max_length=250)
+    dob = models.DateField()
+    address = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(blank=True, null=True, upload_to='avatars/')
+
+    def __str__(self):
+        return self.user.username
